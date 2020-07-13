@@ -9,12 +9,19 @@ A prototype jupyter notebook with components to run a simple viewer for a single
 
 # Usage
 
+## Getting Started
+
 - Clone the repository
 - Open jupyter
 
 ```
 $ jupyter notebook
 ```
+
+## Multiple Databases (Cinema Compare)
+
+- This framework can load multiple databases for side by side comparison
+- The the path bar, enter as the path to many databases as desired, each path seperated by a space 
 
 - Select the **Cinema_SpecD_PNG_Viewer.ipynb** file
 - Input full path to Cinema database when requested
