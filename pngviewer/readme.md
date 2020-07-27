@@ -9,6 +9,12 @@ A prototype jupyter notebook with components to run a simple viewer for a single
 
 # Usage
 
+use the function call:
+
+```
+loadCinemaViewer('paths to cdb folders')
+```
+
 ## Getting Started
 
 - Clone the repository
