@@ -170,8 +170,6 @@ class CinemaViewer():
 
         grid = ipywidgets.GridspecLayout(2, len(self.parameterWidgets)+1)
         grid[0,0] = ipywidgets.Label("Parameters")
-        grid[1,0] = ipywidgets.Label("Paths")
-
         for j in range(0,len(self.parameterWidgets)):
             grid[0,j+1] = self.parameterWidgets[j]
         for j in range(0,len(self.filepathWidgets)):
@@ -179,7 +177,7 @@ class CinemaViewer():
 
         with self.parametersAndFilepathsSelectionOutput:
             self.parametersAndFilepathsSelectionOutput.clear_output()
-            display(grid)
+            # display(grid)
 
         self.updateParameterValueWidgets('')
         return
