@@ -9,10 +9,12 @@ A prototype jupyter notebook with components to run a simple viewer for a single
 
 # Usage
 
-use the function call:
+Load the local module, then create a cinema viewer.
 
 ```
-loadCinemaViewer('paths to cdb folders')
+load cinema
+
+cinema.pynb.loadCinemaViewer('paths to cdb folders')
 ```
 
 ## Getting Started
@@ -24,7 +26,7 @@ loadCinemaViewer('paths to cdb folders')
 $ jupyter notebook
 ```
 
-- Select the **Cinema_SpecD_PNG_Viewer.ipynb** file
+- Select the **cinema_module.ipynb** file
 - Input full path to Cinema database when requested
 
 ## Multiple Databases (Cinema Compare)
