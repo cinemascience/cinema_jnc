@@ -5,6 +5,7 @@ class CinemaViewer():
 
     def __init__(self):
         self.imageWidgets = []
+        self.verticalLayout = True
         # =====================================================================================
         # create display outputs for widgets
         self.parametersAndFilepathsSelectionOutput = ipywidgets.Output(layout={'border': '0px solid black', 'width':'98%'})
@@ -16,6 +17,7 @@ class CinemaViewer():
         self.parameterWidgets = [] # the selected parameters
         self.filepathWidgets = [] # the selected file paths
         self.parameterValueWidgets = [] # the selected parameter values
+        self.uiWidgets = [] # widges for ui interaction
         self.parameterKey2filepathMap = dict() # the key-value map that maps parameter combinations to filepaths
 
         # =====================================================================================
@@ -219,9 +221,30 @@ class CinemaViewer():
             w.observe(self.updateImages, names='value')
             self.parameterValueWidgets.append(w)
 
+        self.uiWidgets.clear()
+        uiImgSize = ipywidgets.SelectionSlider(
+            options=range(100,513),
+            description='image size',
+            disabled=False,
+            continuous_update=True,
+            orientation='horizontal',
+            readout=True
+        )
+        uiImgSize.observe(self.updateImages, names='value')
+        self.uiWidgets.append(uiImgSize)
+            
+        uiImgLayout = ipywidgets.ToggleButtons(
+            options=['Vertical', 'Horizontal'],
+            description='Layout:',
+            disabled=False,
+            continuous_update=True,
+        )
+        uiImgLayout.observe(self.updateImages, names='value')
+        self.uiWidgets.append(uiImgLayout)
+
         with self.parameterValuesOutput:
             self.parameterValuesOutput.clear_output()
-            temp = ipywidgets.VBox(self.parameterValueWidgets)
+            temp = ipywidgets.VBox(self.parameterValueWidgets + self.uiWidgets)
             display( temp )
 
         self.updateImages('')
@@ -234,6 +257,22 @@ class CinemaViewer():
         cdatabases = self.dbPathWidget.value.split(' ')
         cdatabases = list(filter(lambda a: a != '', cdatabases))
         
+        imgsize = str(self.uiWidgets[0].value)
+        
+        changeLayout = False
+        if ((self.verticalLayout == True) and (self.uiWidgets[1].value == "Vertical")):
+            self.verticalLayout = True;
+            changeLayout = False
+        elif ((self.verticalLayout == True) and (self.uiWidgets[1].value == "Horizontal")):
+            self.verticalLayout = False
+            changeLayout = True
+        elif ((self.verticalLayout == False) and (self.uiWidgets[1].value == "Horizontal")):
+            self.verticalLayout = False
+            changeLayout = False
+        elif ((self.verticalLayout == False) and (self.uiWidgets[1].value ==  "Vertical")):
+            self.verticalLayout = True;
+            changeLayout = True
+                
         key = self.buildParameterKey()
         
         files = []
@@ -248,11 +287,28 @@ class CinemaViewer():
             for file in files:
                 w = ipywidgets.Image(
                     format='png',
-                    layout={'display':'block','max_width':'512px','max_height':'512px'}
+                    layout={'display':'block','max_width': str(imgsize)+"px",'max_height': str(imgsize)+"px"}
                 )
                 self.imageWidgets.append(w)
                 with self.imagesOutput:
                     display(w)
+
+        else:
+             for i in range(0,len(files)):
+                 self.imageWidgets[i].layout.max_height = str(imgsize)+"px"
+                 self.imageWidgets[i].layout.max_width = str(imgsize)+"px"
+             if (changeLayout):
+                 if (self.uiWidgets[1].value == "Vertical"):
+                     with self.imagesOutput:
+                         self.imagesOutput.clear_output()
+                         temp = ipywidgets.VBox(self.imageWidgets)
+                         display(temp)
+                 if (self.uiWidgets[1].value == "Horizontal"):
+                     with self.imagesOutput:
+                         self.imagesOutput.clear_output()
+                         temp = ipywidgets.HBox(self.imageWidgets)
+                         display(temp)
+
 
 # to display horizontally, comment out previous 2 lines of code and uncomment below
                 # TODO: implement as an option
