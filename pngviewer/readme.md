@@ -12,9 +12,14 @@ A prototype jupyter notebook with components to run a simple viewer for a single
 Load the local module, then create a cinema viewer.
 
 ```
-load cinema
+load cinesci
 
-cinema.pynb.loadCinemaViewer('paths to cdb folders')
+viewer = cinesci.pynb.CinemaViewer()
+# optionally set layout to verical or horizontal
+viewer.setLayoutToVertical()
+# optionally set height
+viewer.setHeight(250)
+viewer.load("/path/to/cinema/database /path/to/another/cinema/database")
 ```
 
 ## Getting Started
