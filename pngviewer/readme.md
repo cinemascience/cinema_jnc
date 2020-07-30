@@ -5,7 +5,7 @@ A Jupyter notebook with components to run a simple viewer for one or more Cinema
 # Requirements
 
 - python 3
-- jupyter installed
+- jupyter
 
 # Usage
 
