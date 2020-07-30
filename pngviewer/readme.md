@@ -18,15 +18,16 @@ $ jupyter notebook
 Looking at the python code, you load the `cinesci` module, then create a cinema viewer.
 
 ```
-load cinesci
+import cinesci
 
+# create a viewer object
 viewer = cinesci.pynb.CinemaViewer()
-# optionally set layout to verical or horizontal
-viewer.setLayoutToVertical()
-# optionally set height
+# optionally set the layout of the viewer
+viewer.setLayoutToHorizontal()
+# optionally set the height of the viewer
 viewer.setHeight(250)
-# load one or more databases in a single space-separated string
-viewer.load("/path/to/cinema/database /path/to/another/cinema/database")
+# load one or more cinema databases
+viewer.load("data/sphere.cdb data/sphere_01.cdb")
 ```
 
 Contact `cinema-info@lanl.gov` for more information.
