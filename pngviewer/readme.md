@@ -9,6 +9,14 @@ A prototype jupyter notebook with components to run a simple viewer for a single
 
 # Usage
 
+Load the local module, then create a cinema viewer.
+
+```
+load cinema
+
+cinema.pynb.loadCinemaViewer('paths to cdb folders')
+```
+
 ## Getting Started
 
 - Clone the repository
@@ -18,7 +26,7 @@ A prototype jupyter notebook with components to run a simple viewer for a single
 $ jupyter notebook
 ```
 
-- Select the **Cinema_SpecD_PNG_Viewer.ipynb** file
+- Select the **cinema_module.ipynb** file
 - Input full path to Cinema database when requested
 
 ## Multiple Databases (Cinema Compare)
