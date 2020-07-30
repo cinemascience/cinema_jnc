@@ -3,33 +3,37 @@ import ipywidgets
 
 class CinemaViewer():
 
+    LayoutHorizontal = 0
+    LayoutVertical   = 1
+    CinemaViewerDefaultHeight = 512
+
     def __init__(self):
         self.imageWidgets = []
-        self.verticalLayout = True
-        # =====================================================================================
-        # create display outputs for widgets
-        self.parametersAndFilepathsSelectionOutput = ipywidgets.Output(layout={'border': '0px solid black', 'width':'98%'})
-        self.parameterValuesOutput = ipywidgets.Output(layout={'border': '0px solid black', 'width':'40%', 'height':'512px'})
-        self.imagesOutput = ipywidgets.Output(layout={'border': '0px solid black', 'width':'59%'})
+        self.layout = CinemaViewer.LayoutVertical
+        self.height = CinemaViewer.CinemaViewerDefaultHeight
+
+        self.parametersAndFilepathsSelectionOutput = None
+        self.parameterValuesOutput = None
+        self.imagesOutput = None
+        self.uiImageSize = None
 
         # =====================================================================================
-        # global variables that control ...
+        # instance variables that control ...
         self.parameterWidgets = [] # the selected parameters
         self.filepathWidgets = [] # the selected file paths
         self.parameterValueWidgets = [] # the selected parameter values
         self.uiWidgets = [] # widges for ui interaction
+        self.dbPathWidget = []
         self.parameterKey2filepathMap = dict() # the key-value map that maps parameter combinations to filepaths
 
-        # =====================================================================================
-        # create database path widget 
-        self.dbPathWidget = ipywidgets.Text(
-            value='',
-            placeholder='Absolute path to .cdb',
-            description='CDB:',
-            continuous_update=False,
-            disabled=False,
-            layout=ipywidgets.Layout(width='90%')
-        )
+    def setLayoutToVertical(self):
+        self.layout = CinemaViewer.LayoutVertical 
+
+    def setLayoutToHorizontal(self):
+        self.layout = CinemaViewer.LayoutHorizontal 
+
+    def setHeight(self, height):
+        self.height = height
 
     def readDataBaseHeader(self, path):
         index2ParameterNameMap = []
@@ -222,7 +226,7 @@ class CinemaViewer():
             self.parameterValueWidgets.append(w)
 
         self.uiWidgets.clear()
-        uiImgSize = ipywidgets.SelectionSlider(
+        self.uiImageSize = ipywidgets.SelectionSlider(
             options=range(100,513),
             description='image size',
             disabled=False,
@@ -230,17 +234,17 @@ class CinemaViewer():
             orientation='horizontal',
             readout=True
         )
-        uiImgSize.observe(self.updateImages, names='value')
-        self.uiWidgets.append(uiImgSize)
+        self.uiImageSize.observe(self.updateImages, names='value')
+        self.uiWidgets.append(self.uiImageSize)
             
-        uiImgLayout = ipywidgets.ToggleButtons(
-            options=['Vertical', 'Horizontal'],
-            description='Layout:',
-            disabled=False,
-            continuous_update=True,
-        )
-        uiImgLayout.observe(self.updateImages, names='value')
-        self.uiWidgets.append(uiImgLayout)
+#       uiImgLayout = ipywidgets.ToggleButtons(
+#           options=['Vertical', 'Horizontal'],
+#           description='Layout:',
+#           disabled=False,
+#           continuous_update=True,
+#       )
+#       uiImgLayout.observe(self.updateImages, names='value')
+#       self.uiWidgets.append(uiImgLayout)
 
         with self.parameterValuesOutput:
             self.parameterValuesOutput.clear_output()
@@ -253,26 +257,12 @@ class CinemaViewer():
 
     # =====================================================================================
     # fetch images that correspond to the currently selected parameter values 
-    def updateImages(self, ignore):
+    def updateImages(self, ignore, changeLayout=False):
         cdatabases = self.dbPathWidget.value.split(' ')
         cdatabases = list(filter(lambda a: a != '', cdatabases))
         
-        imgsize = str(self.uiWidgets[0].value)
+        imgsize = str(self.uiImageSize.value)
         
-        changeLayout = False
-        if ((self.verticalLayout == True) and (self.uiWidgets[1].value == "Vertical")):
-            self.verticalLayout = True;
-            changeLayout = False
-        elif ((self.verticalLayout == True) and (self.uiWidgets[1].value == "Horizontal")):
-            self.verticalLayout = False
-            changeLayout = True
-        elif ((self.verticalLayout == False) and (self.uiWidgets[1].value == "Horizontal")):
-            self.verticalLayout = False
-            changeLayout = False
-        elif ((self.verticalLayout == False) and (self.uiWidgets[1].value ==  "Vertical")):
-            self.verticalLayout = True;
-            changeLayout = True
-                
         key = self.buildParameterKey()
         
         files = []
@@ -297,25 +287,18 @@ class CinemaViewer():
              for i in range(0,len(files)):
                  self.imageWidgets[i].layout.max_height = str(imgsize)+"px"
                  self.imageWidgets[i].layout.max_width = str(imgsize)+"px"
+
              if (changeLayout):
-                 if (self.uiWidgets[1].value == "Vertical"):
+                 if self.layout == CinemaViewer.LayoutVertical:
                      with self.imagesOutput:
                          self.imagesOutput.clear_output()
                          temp = ipywidgets.VBox(self.imageWidgets)
                          display(temp)
-                 if (self.uiWidgets[1].value == "Horizontal"):
+                 else:
                      with self.imagesOutput:
                          self.imagesOutput.clear_output()
                          temp = ipywidgets.HBox(self.imageWidgets)
                          display(temp)
-
-
-# to display horizontally, comment out previous 2 lines of code and uncomment below
-                # TODO: implement as an option
-#               with self.imagesOutput:
-#                   self.imagesOutput.clear_output()
-#                   temp = ipywidgets.HBox(self.imageWidgets)
-#                   display(temp)                
 
         for i in range(0,len(files)):
             self.imageWidgets[i].value = files[i]
@@ -323,6 +306,26 @@ class CinemaViewer():
         return
 
     def load(self, paths):
+        # =====================================================================================
+        # create display outputs for widgets
+        # =====================================================================================
+        self.parametersAndFilepathsSelectionOutput = ipywidgets.Output(layout={'border': '0px solid black', 'width':'98%'})
+        self.parameterValuesOutput = ipywidgets.Output(layout={'border': '0px solid black', 
+                                        'width':'40%', 'height':'{}px'.format(self.height)})
+        self.imagesOutput = ipywidgets.Output(layout={'border': '0px solid black', 'width':'59%'})
+        self.uiImageSize = None
+
+        # =====================================================================================
+        # create database path widget 
+        self.dbPathWidget = ipywidgets.Text(
+            value='',
+            placeholder='Absolute path to .cdb',
+            description='CDB:',
+            continuous_update=False,
+            disabled=False,
+            layout=ipywidgets.Layout(width='90%')
+        )
+
         #set paths
         self.dbPathWidget.value = paths
 
@@ -335,4 +338,7 @@ class CinemaViewer():
             ipywidgets.HBox([self.parameterValuesOutput, self.imagesOutput])
         ])
         display(frame)
+
+        # update the images, and change the layout
+        self.updateImages('', changeLayout=True)
 
