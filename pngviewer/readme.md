@@ -15,7 +15,7 @@ Run Jupyter and select the **cinema_module.ipynb** file
 $ jupyter notebook
 ```
 
-Load the `cinesci` module, then create a cinema viewer.
+Looking at the python code, you load the `cinesci` module, then create a cinema viewer.
 
 ```
 load cinesci
