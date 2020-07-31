@@ -15,13 +15,13 @@ Run Jupyter and select the **cinema_module.ipynb** file
 $ jupyter notebook
 ```
 
-Looking at the python code, you load the `cinesci` module, then create a cinema viewer.
+Looking at the python code, you load the `cinemasci` module, then create a cinema viewer.
 
 ```
-import cinesci
+import cinemasci
 
 # create a viewer object
-viewer = cinesci.pynb.CinemaViewer()
+viewer = cinemasci.pynb.CinemaViewer()
 # optionally set the layout of the viewer
 viewer.setLayoutToHorizontal()
 # optionally set the height of the viewer
