@@ -1,6 +1,6 @@
 ## CinemaViewer Jupyter notebook component
 
-A Jupyter notebook with components to run a simple viewer for one or more Cinema databases.  Designed for the use case of populated, cinema databases of common format images. 
+A Jupyter notebook with components to run a simple viewer for one or more Cinema databases.  Designed for the use case of fully populated cinema databases of common format images. 
 
 # Requirements
 
