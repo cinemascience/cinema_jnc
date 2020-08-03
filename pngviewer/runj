@@ -6,9 +6,11 @@ if [ "$#" -eq 1 ]; then
     BROWSER=$1
 fi
 
-mkdir run_$BROWSER
-pushd run_$BROWSER
-cp ../cinema_module.ipynb .
-cp -rf ../data .
-cp -rf ../cinemasci .
+mkdir scratch
+pushd scratch
+mkdir $BROWSER
+pushd $BROWSER
+cp ../../cinema_module.ipynb .
+cp -rf ../../data .
+cp -rf ../../cinemasci .
 jupyter-3.7 notebook --browser=$BROWSER
