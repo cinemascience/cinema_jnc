@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BROWSER=chrome
+
+mkdir run_$BROWSER
+pushd run_$BROWSER
+cp ../cinema_module.ipynb .
+jupyter-3.7 notebook --browser=$BROWSER
