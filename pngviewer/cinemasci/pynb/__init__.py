@@ -1,5 +1,6 @@
 import csv
 import ipywidgets
+import os
 
 class CinemaViewer():
 
@@ -35,6 +36,11 @@ class CinemaViewer():
     def setHeight(self, height):
         self.height = height
 
+    def parseInput(self, paths):
+        cdatabases = paths.split(' ')
+        cdatabases = list(filter(lambda a: a != '', cdatabases))
+        return cdatabases
+        
     def readDataBaseHeader(self, path):
         index2ParameterNameMap = []
         with open(path+"/data.csv") as csv_file:
@@ -258,8 +264,7 @@ class CinemaViewer():
     # =====================================================================================
     # fetch images that correspond to the currently selected parameter values 
     def updateImages(self, ignore, changeLayout=False):
-        cdatabases = self.dbPathWidget.value.split(' ')
-        cdatabases = list(filter(lambda a: a != '', cdatabases))
+        cdatabases = self.parseInput(self.dbPathWidget.value)
         
         imgsize = str(self.uiImageSize.value)
         
@@ -307,6 +312,14 @@ class CinemaViewer():
 
     def load(self, paths):
         # =====================================================================================
+        # check input paths of cinema dbs
+        cdatabases = self.parseInput(paths)
+        for cdb in cdatabases:
+            if (not os.path.isdir(cdb)):
+                print(cdb + " does not exist")
+                return
+        
+        # =====================================================================================
         # create display outputs for widgets
         # =====================================================================================
         self.parametersAndFilepathsSelectionOutput = ipywidgets.Output(layout={'border': '0px solid black', 'width':'98%'})
@@ -325,7 +338,6 @@ class CinemaViewer():
             disabled=False,
             layout=ipywidgets.Layout(width='90%')
         )
-
         #set paths
         self.dbPathWidget.value = paths
 
