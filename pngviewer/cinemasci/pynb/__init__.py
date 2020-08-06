@@ -38,21 +38,35 @@ class CinemaViewer():
     def setHeight(self, height):
         self.height = height
 
+    def displayControls(self):
+        with self.parameterValuesOutput:
+            self.parameterValuesOutput.clear_output()
+            tempParameterValueWidgets = []
+            for w in self.parameterValueWidgets:
+                if w.description not in self.hideParameterControls:
+                    tempParameterValueWidgets.append(w)
+            tempUIWidgets = []
+            for w in self.uiWidgets:
+                if w.description not in self.hideUIControls:
+                    tempUIWidgets.append(w)
+            temp = ipywidgets.VBox(tempParameterValueWidgets + tempUIWidgets)
+            display( temp )     
+        
     def hideUIControl(self, name):
         for w in self.uiWidgets:
             if (name == w.description):
                 if (name not in self.hideUIControls):
                     self.hideUIControls.append(name)
-                self.updateParameterValueWidgets('')
+                self.displayControls()
                 return True
-        return False
-        
+        return False   
+    
     def showUIControl(self, name):
         for w in self.uiWidgets:
             if (name == w.description):
                 if (name in self.hideUIControls):
                     self.hideUIControls.remove(name)
-                self.updateParameterValueWidgets('')
+                self.displayControls()
                 return True
         return False
 
@@ -92,7 +106,7 @@ class CinemaViewer():
             if (name == w.description):
                 if (name not in self.hideParameterControls):
                     self.hideParameterControls.append(name)
-                self.updateParameterValueWidgets('')
+                self.displayControls()
                 return True
         return False   
     
@@ -101,7 +115,7 @@ class CinemaViewer():
             if (name == w.description):
                 if (name in self.hideParameterControls):
                     self.hideParameterControls.remove(name)
-                self.updateParameterValueWidgets('')
+                self.displayControls()
                 return True
         return False
 
@@ -359,16 +373,21 @@ class CinemaViewer():
 
         with self.parameterValuesOutput:
             self.parameterValuesOutput.clear_output()
-            tempParameterValueWidgets = []
-            for w in self.parameterValueWidgets:
-                if w.description not in self.hideParameterControls:
-                    tempParameterValueWidgets.append(w)
-            tempUIWidgets = []
-            for w in self.uiWidgets:
-                if w.description not in self.hideUIControls:
-                    tempUIWidgets.append(w)
-            temp = ipywidgets.VBox(tempParameterValueWidgets + tempUIWidgets)
+            temp = ipywidgets.VBox(self.parameterValueWidgets + self.uiWidgets)
             display( temp )
+
+#         with self.parameterValuesOutput:
+#             self.parameterValuesOutput.clear_output()
+#             tempParameterValueWidgets = []
+#             for w in self.parameterValueWidgets:
+#                 if w.description not in self.hideParameterControls:
+#                     tempParameterValueWidgets.append(w)
+#             tempUIWidgets = []
+#             for w in self.uiWidgets:
+#                 if w.description not in self.hideUIControls:
+#                     tempUIWidgets.append(w)
+#             temp = ipywidgets.VBox(tempParameterValueWidgets + tempUIWidgets)
+#             display( temp )
 
         self.updateImages('')
         return
