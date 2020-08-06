@@ -18,6 +18,7 @@ class CinemaViewer():
         self.imagesOutput = None
         self.uiImageSize = None
         self.hideParameterControls = []
+        self.hideUIControls = []
 
         # =====================================================================================
         # instance variables that control ...
@@ -37,6 +38,55 @@ class CinemaViewer():
     def setHeight(self, height):
         self.height = height
 
+    def hideUIControl(self, name):
+        for w in self.uiWidgets:
+            if (name == w.description):
+                if (name not in self.hideUIControls):
+                    self.hideUIControls.append(name)
+                self.updateParameterValueWidgets('')
+                return True
+        return False
+        
+    def showUIControl(self, name):
+        for w in self.uiWidgets:
+            if (name == w.description):
+                if (name in self.hideUIControls):
+                    self.hideUIControls.remove(name)
+                self.updateParameterValueWidgets('')
+                return True
+        return False
+
+    def getUINames(self):
+        ui = []
+        for w in self.uiWidgets:
+            ui.append(w.description)
+        return ui
+    
+    def getUIValues(self):
+        ui = {}
+        for w in self.uiWidgets:
+            ui[w.description] = w.value
+        return ui
+    
+    def getUIOptions(self, name):
+        for w in self.uiWidgets:
+            if (w.description == name):
+                return w.options
+            
+    def getUIValue(self, name):
+        for w in self.uiWidgets:
+            if (w.description == name):
+                return w.value
+    
+    def setUIValues(self, valuesDict):
+        for w in self.uiWidgets:
+            if w.description in valuesDict.keys():
+                if (valuesDict[w.description] in w.options):
+                    w.value = valuesDict[w.description]
+                else:
+                    print(str(valuesDict[w.description]) + " is not an value of " + w.description)
+                
+    
     def hideParameterControl(self, name):
         for w in self.parameterValueWidgets:
             if (name == w.description):
@@ -54,13 +104,6 @@ class CinemaViewer():
                 self.updateParameterValueWidgets('')
                 return True
         return False
-            
-
-        
-    def parseInput(self, paths):
-        cdatabases = paths.split(' ')
-        cdatabases = list(filter(lambda a: a != '', cdatabases))
-        return cdatabases
 
     def getParameterNames(self):
         params = []
@@ -99,7 +142,12 @@ class CinemaViewer():
 #                         w.value = valuesDict[key]
 #                     else:
 #                         print(str(valuesDict[key]) + " is not an option of " + key)
-           
+
+    def parseInput(self, paths):
+        cdatabases = paths.split(' ')
+        cdatabases = list(filter(lambda a: a != '', cdatabases))
+        return cdatabases
+
     def readDataBaseHeader(self, path):
         index2ParameterNameMap = []
         with open(path+"/data.csv") as csv_file:
@@ -315,7 +363,11 @@ class CinemaViewer():
             for w in self.parameterValueWidgets:
                 if w.description not in self.hideParameterControls:
                     tempParameterValueWidgets.append(w)
-            temp = ipywidgets.VBox(tempParameterValueWidgets + self.uiWidgets)
+            tempUIWidgets = []
+            for w in self.uiWidgets:
+                if w.description not in self.hideUIControls:
+                    tempUIWidgets.append(w)
+            temp = ipywidgets.VBox(tempParameterValueWidgets + tempUIWidgets)
             display( temp )
 
         self.updateImages('')
