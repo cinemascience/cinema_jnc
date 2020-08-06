@@ -40,7 +40,34 @@ class CinemaViewer():
         cdatabases = paths.split(' ')
         cdatabases = list(filter(lambda a: a != '', cdatabases))
         return cdatabases
-        
+   
+    def getParameterValues(self):
+        params = {}
+        for w in self.parameterValueWidgets:
+            params[w.description] = w.value
+        return params
+    
+    def getParameterValue(self, name):
+        for w in self.parameterValueWidgets:
+            if (w.description == name):
+                return w.value
+            
+    def setParameterValues(self, valuesDict):
+        for w in self.parameterValueWidgets:
+            if w.description in valuesDict.keys():
+                if (valuesDict[w.description] in w.options):
+                    w.value = valuesDict[w.description]
+                else:
+                    print(str(valuesDict[w.description]) + " is not an value of " + w.description)
+            
+#         for key in valuesDict:
+#             for w in self.parameterValueWidgets:
+#                 if key == w.description:
+#                     if (valuesDict[key] in w.options):
+#                         w.value = valuesDict[key]
+#                     else:
+#                         print(str(valuesDict[key]) + " is not an option of " + key)
+           
     def readDataBaseHeader(self, path):
         index2ParameterNameMap = []
         with open(path+"/data.csv") as csv_file:
@@ -151,8 +178,6 @@ class CinemaViewer():
         for w in self.parameterValueWidgets:
             key += str(w.value)+"_"
         return key
-
-
 
     # =====================================================================================
     # update widgets to distinguish between parameters and filepaths of the selected database
@@ -269,7 +294,6 @@ class CinemaViewer():
         imgsize = str(self.uiImageSize.value)
         
         key = self.buildParameterKey()
-        
         files = []
         for cdb in cdatabases:
             for filepath in self.parameterKey2filepathMap[key]:
@@ -342,7 +366,7 @@ class CinemaViewer():
         self.dbPathWidget.value = paths
 
         # start listening for new database path
-        self.updateParameterAndFilepathWidgets('')
+        self.updateParameterAndFilepathWidgets('')      
         
         # display UI
         frame = ipywidgets.VBox([
