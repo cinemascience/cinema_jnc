@@ -74,6 +74,11 @@ class CinemaViewer():
             params[w.description] = w.value
         return params
     
+    def getParameterOptions(self, name):
+        for w in self.parameterValueWidgets:
+            if (w.description == name):
+                return w.options
+    
     def getParameterValue(self, name):
         for w in self.parameterValueWidgets:
             if (w.description == name):
