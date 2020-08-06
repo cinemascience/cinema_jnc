@@ -17,6 +17,7 @@ class CinemaViewer():
         self.parameterValuesOutput = None
         self.imagesOutput = None
         self.uiImageSize = None
+        self.hideParameterControls = []
 
         # =====================================================================================
         # instance variables that control ...
@@ -36,11 +37,37 @@ class CinemaViewer():
     def setHeight(self, height):
         self.height = height
 
+    def hideParameterControl(self, name):
+        for w in self.parameterValueWidgets:
+            if (name == w.description):
+                if (name not in self.hideParameterControls):
+                    self.hideParameterControls.append(name)
+                self.updateParameterValueWidgets('')
+                return True
+        return False   
+    
+    def showParameterControl(self, name):
+        for w in self.parameterValueWidgets:
+            if (name == w.description):
+                if (name in self.hideParameterControls):
+                    self.hideParameterControls.remove(name)
+                self.updateParameterValueWidgets('')
+                return True
+        return False
+            
+
+        
     def parseInput(self, paths):
         cdatabases = paths.split(' ')
         cdatabases = list(filter(lambda a: a != '', cdatabases))
         return cdatabases
-   
+
+    def getParameterNames(self):
+        params = []
+        for w in self.parameterValueWidgets:
+            params.append(w.description)
+        return params
+
     def getParameterValues(self):
         params = {}
         for w in self.parameterValueWidgets:
@@ -279,7 +306,11 @@ class CinemaViewer():
 
         with self.parameterValuesOutput:
             self.parameterValuesOutput.clear_output()
-            temp = ipywidgets.VBox(self.parameterValueWidgets + self.uiWidgets)
+            tempParameterValueWidgets = []
+            for w in self.parameterValueWidgets:
+                if w.description not in self.hideParameterControls:
+                    tempParameterValueWidgets.append(w)
+            temp = ipywidgets.VBox(tempParameterValueWidgets + self.uiWidgets)
             display( temp )
 
         self.updateImages('')
