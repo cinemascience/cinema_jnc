@@ -1,11 +1,11 @@
 language: python
 
 # Notification settings
-notifications:
-  email:
-    recipients:
-      - ethan.stam@gmail.com
-      - dhr@lanl.gov
+#notifications:
+#  email:
+#    recipients:
+#      - ethan.stam@gmail.com
+#      - dhr@lanl.gov
 
 # Get the repository
 git:
