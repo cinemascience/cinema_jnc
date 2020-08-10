@@ -1,0 +1,28 @@
+language: python
+
+# Notification settings
+notifications:
+  email:
+    recipients:
+      - ethan.stam@gmail.com
+      - dhr@lanl.gov
+
+# Get the repository
+git:
+  # Depth of commits to grab. Less is faster
+  depth: 1
+
+# Matrix of operating systems and dependencies
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+
+# Install dependencies here      
+install:
+        - pip install jupyter 
+
+# The build step
+script:
+        - cd pngviewer
+        - python -m unittest discover testing
