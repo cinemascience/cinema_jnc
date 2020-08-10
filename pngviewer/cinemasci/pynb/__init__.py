@@ -395,6 +395,7 @@ class CinemaViewer():
 
     # =====================================================================================
     # fetch images that correspond to the currently selected parameter values 
+    # =====================================================================================
     def updateImages(self, ignore, changeLayout=False):
         cdatabases = self.parseInput(self.dbPathWidget.value)
         
@@ -441,9 +442,13 @@ class CinemaViewer():
             
         return
 
+    # =====================================================================================
+    # load a set of cinema databases and build UI elements to display them 
+    # =====================================================================================
     def load(self, paths):
         # =====================================================================================
         # check input paths of cinema dbs
+        # =====================================================================================
         cdatabases = self.parseInput(paths)
         for cdb in cdatabases:
             if (not os.path.isdir(cdb)):
@@ -461,6 +466,7 @@ class CinemaViewer():
 
         # =====================================================================================
         # create database path widget 
+        # =====================================================================================
         self.dbPathWidget = ipywidgets.Text(
             value='',
             placeholder='Absolute path to .cdb',
@@ -469,7 +475,7 @@ class CinemaViewer():
             disabled=False,
             layout=ipywidgets.Layout(width='90%')
         )
-        #set paths
+        # set paths
         self.dbPathWidget.value = paths
 
         # start listening for new database path
