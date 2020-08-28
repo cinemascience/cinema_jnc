@@ -39,7 +39,7 @@ viewer.setLayoutToHorizontal()
 viewer.setHeight(250)
 ```
 
-![Jupyter Notebook Cinema Viewer Example](pngviewer/images/example.png)
+![Jupyter Notebook Cinema Viewer Example](https://github.com/cinemascience/cinema_jnc/tree/master/pngviewer/images/example.png)
 
 ## UI manipulation
 
