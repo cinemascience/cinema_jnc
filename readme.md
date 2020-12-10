@@ -1,4 +1,5 @@
-# Jupyter notebook-based components for Cinema
-[![Build Status](https://travis-ci.org/cinemascience/cinema_jnc.svg?branch=master)](https://travis-ci.org/cinemascience/cinema_jnc)
+## Cinema:JNC repository DEPRICATED
 
-- pngviewer - a viewer for Cinema databases
+This repository has been **DEPRICATED**
+
+New development will continue under the [cinemasci](https://github.com/cinemascience/cinemasci) repository.
